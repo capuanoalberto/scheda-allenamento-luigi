@@ -35,6 +35,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #bbb; margin: 1.25rem 0 10px; display: flex; align-items: center; gap: 8px; }
 .section-label::after { content: ''; flex: 1; height: 1px; background: #e8e8e4; }
 
+/* MOBILITÀ CARD */
+.mobility-card { background: #fff; border: 1.5px solid #e0d6f7; border-radius: 14px; margin-bottom: 12px; overflow: hidden; }
+.mobility-top { padding: 13px 14px 13px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mobility-left { display: flex; align-items: center; gap: 10px; }
+.mobility-emoji { font-size: 22px; flex-shrink: 0; }
+.mobility-name { font-size: 14px; font-weight: 600; color: #111; margin-bottom: 2px; }
+.mobility-meta { font-size: 12px; color: #999; }
+.mobility-yt { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; color: #c0392b; text-decoration: none; border: 1px solid #f5c0bc; border-radius: 7px; padding: 4px 9px; white-space: nowrap; flex-shrink: 0; background: #fef4f3; }
+.mobility-tip { padding: 0 14px 12px; font-size: 12px; color: #7c5fbf; background: #f8f4ff; border-top: 1px solid #ede6ff; padding: 9px 14px; }
+
 /* EXERCISE CARD */
 .exercise-card { background: #fff; border: 1px solid #e8e8e4; border-radius: 14px; margin-bottom: 12px; overflow: hidden; }
 .exercise-top { padding: 13px 14px 10px; }
@@ -77,8 +87,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .abs-yt { font-size: 12px; color: #c0392b; text-decoration: none; background: #fef4f3; border: 1px solid #f5c0bc; border-radius: 6px; padding: 3px 8px; flex-shrink: 0; }
 
 .footer { text-align: center; padding: 1.5rem 1rem 2rem; font-size: 12px; color: #ccc; }
-
-/* reset btn */
 .reset-btn { background: none; border: 1px solid #ddd; border-radius: 8px; padding: 4px 10px; font-size: 11px; color: #bbb; cursor: pointer; margin-top: 8px; }
 .reset-btn:hover { border-color: #f5c0bc; color: #c0392b; }
 </style>
@@ -101,6 +109,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="day-intro">
     <div class="day-icon chest">💪</div>
     <div><div class="day-label">Giorno 1</div><div class="day-title">Petto e Tricipiti</div></div>
+  </div>
+
+  <div class="section-label">Riscaldamento</div>
+
+  <div class="mobility-card">
+    <div class="mobility-top">
+      <div class="mobility-left">
+        <span class="mobility-emoji">🌀</span>
+        <div>
+          <div class="mobility-name">Mobilità e stretching pre-allenamento</div>
+          <div class="mobility-meta">5–10 min · prima di iniziare</div>
+        </div>
+      </div>
+      <a class="mobility-yt" href="https://www.youtube.com/shorts/ds-QKx2L0W4" target="_blank">▶ Video</a>
+    </div>
+    <div class="mobility-tip">💡 Non saltare questa parte — prepara articolazioni e muscoli, riduce il rischio di infortuni e migliora la performance.</div>
   </div>
 
   <div class="section-label">Panca piana</div>
@@ -191,7 +215,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       </div>
       <div class="details-grid">
         <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+1–2 kg ogni 3 sett. Ottimo per il capo lungo del tricipite.</div></div>
-        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Sdraiato in panca, gomiti puntati al soffitto. Abbassa i manubri verso le orecchie, non la fronte.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Sdraiato in panca, gomiti puntati al soffitto. Abbassa verso le orecchie, non la fronte.</div></div>
       </div>
     </div>
     <div class="tracker">
@@ -214,6 +238,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="day-intro">
     <div class="day-icon back">🔋</div>
     <div><div class="day-label">Giorno 2</div><div class="day-title">Schiena e Bicipiti</div></div>
+  </div>
+
+  <div class="section-label">Riscaldamento</div>
+
+  <div class="mobility-card">
+    <div class="mobility-top">
+      <div class="mobility-left">
+        <span class="mobility-emoji">🌀</span>
+        <div>
+          <div class="mobility-name">Mobilità e stretching pre-allenamento</div>
+          <div class="mobility-meta">5–10 min · prima di iniziare</div>
+        </div>
+      </div>
+      <a class="mobility-yt" href="https://www.youtube.com/shorts/ds-QKx2L0W4" target="_blank">▶ Video</a>
+    </div>
+    <div class="mobility-tip">💡 Non saltare questa parte — prepara articolazioni e muscoli, riduce il rischio di infortuni e migliora la performance.</div>
   </div>
 
   <div class="section-label">Cavi — lat machine e rematore</div>
@@ -259,7 +299,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="exercise-card" data-id="g2_pullover">
     <div class="exercise-top">
       <div class="exercise-header">
-        <div><div class="exercise-name">Pullover al cavo </div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
+        <div><div class="exercise-name">Pullover al cavo</div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
         <a class="yt-link" href="https://www.youtube.com/shorts/hzVSxRUWD9c" target="_blank">▶ Video</a>
       </div>
       <div class="details-grid">
@@ -280,7 +320,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="exercise-card" data-id="g2_curl_manubri">
     <div class="exercise-top">
       <div class="exercise-header">
-        <div><div class="exercise-name">Curl con manubri da seduto (panca come da video)</div><div class="exercise-meta">3 serie · 10–12 rip · riposo 60 sec</div></div>
+        <div><div class="exercise-name">Curl con manubri da seduto</div><div class="exercise-meta">3 serie · 10–12 rip · riposo 60 sec</div></div>
         <a class="yt-link" href="https://www.youtube.com/shorts/l3SwBH4NBEI" target="_blank">▶ Video</a>
       </div>
       <div class="details-grid">
@@ -321,6 +361,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="day-intro">
     <div class="day-icon legs">🦵</div>
     <div><div class="day-label">Giorno 3</div><div class="day-title">Gambe e Spalle</div></div>
+  </div>
+
+  <div class="section-label">Riscaldamento</div>
+
+  <div class="mobility-card">
+    <div class="mobility-top">
+      <div class="mobility-left">
+        <span class="mobility-emoji">🌀</span>
+        <div>
+          <div class="mobility-name">Mobilità e stretching pre-allenamento</div>
+          <div class="mobility-meta">5–10 min · prima di iniziare</div>
+        </div>
+      </div>
+      <a class="mobility-yt" href="https://www.youtube.com/shorts/ds-QKx2L0W4" target="_blank">▶ Video</a>
+    </div>
+    <div class="mobility-tip">💡 Non saltare questa parte — prepara articolazioni e muscoli, riduce il rischio di infortuni e migliora la performance.</div>
   </div>
 
   <div class="section-label">Macchine gambe</div>
@@ -392,7 +448,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       </div>
       <div class="details-grid">
         <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+2 kg ogni 2 sett. Base per le spalle, privilegia la forma.</div></div>
-        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Presa ad altezza spalle</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Presa ad altezza spalle.</div></div>
       </div>
     </div>
     <div class="tracker">
@@ -425,7 +481,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="exercise-card" data-id="g3_alzatefrontali">
     <div class="exercise-top">
       <div class="exercise-header">
-        <div><div class="exercise-name">Alzate frontali con manubri </div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
+        <div><div class="exercise-name">Alzate frontali con manubri</div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
         <a class="yt-link" href="https://www.youtube.com/watch?v=fq9pilcFkDQ" target="_blank">▶ Video</a>
       </div>
       <div class="details-grid">
@@ -451,7 +507,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <div class="footer">Dati salvati nel browser · video tutorial YouTube</div>
 
 <script>
-// ── TRACKER LOGIC ────────────────────────────────────────────
 function getKey(card, setIndex, field) {
   return 'scheda__' + card.dataset.id + '__s' + setIndex + '__' + field;
 }
@@ -474,7 +529,6 @@ function buildSets(card) {
       '<button class="set-done" data-idx="' + i + '" onclick="toggleDone(this)">✓</button>';
     list.appendChild(row);
 
-    // restore from localStorage
     var kgVal = localStorage.getItem(getKey(card, i, 'kg'));
     var ripVal = localStorage.getItem(getKey(card, i, 'rip'));
     var doneVal = localStorage.getItem(getKey(card, i, 'done'));
@@ -482,7 +536,6 @@ function buildSets(card) {
     if (ripVal) row.querySelector('[data-field="rip"]').value = ripVal;
     if (doneVal === '1') row.querySelector('.set-done').classList.add('checked');
 
-    // save on change
     row.querySelectorAll('.set-input').forEach(function(inp) {
       inp.addEventListener('input', function() {
         localStorage.setItem(getKey(card, parseInt(inp.dataset.idx), inp.dataset.field), inp.value);
@@ -490,7 +543,6 @@ function buildSets(card) {
     });
   }
 
-  // note
   var ta = card.querySelector('textarea');
   var savedNote = localStorage.getItem(getNoteKey(card));
   if (savedNote) ta.value = savedNote;
@@ -521,14 +573,12 @@ function resetCard(btn) {
   card.querySelector('textarea').value = '';
 }
 
-// ── TABS ────────────────────────────────────────────────────
 function showDay(index) {
   document.querySelectorAll('.day-panel').forEach(function(p, i) { p.classList.toggle('active', i === index); });
   document.querySelectorAll('.tab').forEach(function(t, i) { t.classList.toggle('active', i === index); });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ── INIT ────────────────────────────────────────────────────
 document.querySelectorAll('.exercise-card[data-id]').forEach(function(card) {
   buildSets(card);
 });
