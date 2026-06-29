@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scheda Allenamento 3 Giorni</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
+
+.header { background: #fff; padding: 1.25rem 1.5rem 1rem; border-bottom: 1px solid #e8e8e4; position: sticky; top: 0; z-index: 10; }
+.header h1 { font-size: 19px; font-weight: 600; color: #111; margin-bottom: 2px; }
+.header p { font-size: 12px; color: #999; }
+
+.tabs { display: flex; background: #fff; border-bottom: 1px solid #e8e8e4; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { padding: 11px 14px; font-size: 13px; font-weight: 400; color: #999; cursor: pointer; border-bottom: 2.5px solid transparent; white-space: nowrap; background: none; border-top: none; border-left: none; border-right: none; border-radius: 0; flex-shrink: 0; }
+.tab.active { color: #111; font-weight: 600; border-bottom-color: #111; }
+.tab-badge { display: inline-block; font-size: 11px; padding: 2px 7px; border-radius: 99px; margin-left: 5px; font-weight: 500; }
+.badge-petto { background: #ddeeff; color: #1a5fa8; }
+.badge-schiena { background: #dcf0dc; color: #276427; }
+.badge-gambe { background: #fef0d6; color: #8a5c0a; }
+
+.day-panel { display: none; padding: 1rem; }
+.day-panel.active { display: block; }
+
+.day-intro { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; background: #fff; border-radius: 14px; padding: 14px 16px; border: 1px solid #e8e8e4; }
+.day-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.day-icon.chest { background: #ddeeff; }
+.day-icon.back { background: #dcf0dc; }
+.day-icon.legs { background: #fef0d6; }
+.day-label { font-size: 11px; color: #bbb; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+.day-title { font-size: 17px; font-weight: 600; color: #111; }
+
+.section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #bbb; margin: 1.25rem 0 10px; display: flex; align-items: center; gap: 8px; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: #e8e8e4; }
+
+/* EXERCISE CARD */
+.exercise-card { background: #fff; border: 1px solid #e8e8e4; border-radius: 14px; margin-bottom: 12px; overflow: hidden; }
+.exercise-top { padding: 13px 14px 10px; }
+.exercise-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.exercise-name { font-size: 14px; font-weight: 600; color: #111; margin-bottom: 2px; }
+.exercise-meta { font-size: 12px; color: #999; }
+.yt-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; color: #c0392b; text-decoration: none; border: 1px solid #f5c0bc; border-radius: 7px; padding: 4px 9px; white-space: nowrap; flex-shrink: 0; background: #fef4f3; }
+
+.details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 2px; }
+@media (max-width: 380px) { .details-grid { grid-template-columns: 1fr; } }
+.detail-box { background: #f8f8f5; border-radius: 9px; padding: 8px 10px; }
+.detail-box-label { font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; font-weight: 600; }
+.detail-box-value { font-size: 12px; color: #555; line-height: 1.45; }
+.progression { color: #1a5fa8; }
+
+/* TRACKER */
+.tracker { background: #f8f8f5; border-top: 1px solid #eee; padding: 10px 14px 12px; }
+.tracker-title { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+.sets-list { display: flex; flex-direction: column; gap: 6px; }
+.set-row { display: flex; align-items: center; gap: 8px; }
+.set-num { font-size: 12px; font-weight: 600; color: #bbb; min-width: 20px; }
+.set-input { border: 1px solid #ddd; border-radius: 8px; padding: 6px 8px; font-size: 13px; background: #fff; color: #111; text-align: center; width: 70px; -moz-appearance: textfield; }
+.set-input::-webkit-outer-spin-button, .set-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.set-input:focus { outline: none; border-color: #aac8f0; }
+.set-separator { font-size: 12px; color: #bbb; }
+.set-done { width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid #ddd; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; transition: all 0.15s; }
+.set-done.checked { background: #e6f4e6; border-color: #6abf6a; }
+.tracker-note { margin-top: 8px; }
+.tracker-note textarea { width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 7px 9px; font-size: 12px; color: #444; background: #fff; resize: none; font-family: inherit; line-height: 1.4; }
+.tracker-note textarea:focus { outline: none; border-color: #aac8f0; }
+.tracker-note textarea::placeholder { color: #ccc; }
+
+/* ABS */
+.abs-section { border: 1.5px solid #c4daff; border-radius: 14px; padding: 13px 14px; background: #f0f6ff; margin-top: 1.25rem; margin-bottom: 1rem; }
+.abs-title { font-size: 13px; font-weight: 600; color: #1a5fa8; margin-bottom: 10px; }
+.abs-exercise { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #d6e8ff; font-size: 13px; color: #222; gap: 8px; }
+.abs-exercise:last-child { border-bottom: none; padding-bottom: 0; }
+.abs-row { display: flex; align-items: center; gap: 8px; flex: 1; }
+.abs-sets { font-size: 12px; color: #1a5fa8; background: #fff; border-radius: 8px; padding: 3px 9px; white-space: nowrap; flex-shrink: 0; font-weight: 500; }
+.abs-yt { font-size: 12px; color: #c0392b; text-decoration: none; background: #fef4f3; border: 1px solid #f5c0bc; border-radius: 6px; padding: 3px 8px; flex-shrink: 0; }
+
+.footer { text-align: center; padding: 1.5rem 1rem 2rem; font-size: 12px; color: #ccc; }
+
+/* reset btn */
+.reset-btn { background: none; border: 1px solid #ddd; border-radius: 8px; padding: 4px 10px; font-size: 11px; color: #bbb; cursor: pointer; margin-top: 8px; }
+.reset-btn:hover { border-color: #f5c0bc; color: #c0392b; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Scheda 3 giorni — principianti</h1>
+  <p>Allenamento per gruppi muscolari · i dati inseriti vengono salvati automaticamente</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showDay(0)">Giorno 1 <span class="tab-badge badge-petto">Petto · Tri</span></button>
+  <button class="tab" onclick="showDay(1)">Giorno 2 <span class="tab-badge badge-schiena">Schiena · Bi</span></button>
+  <button class="tab" onclick="showDay(2)">Giorno 3 <span class="tab-badge badge-gambe">Gambe · Spalle</span></button>
+</div>
+
+<!-- ===================== GIORNO 1 ===================== -->
+<div class="day-panel active" id="day-0">
+  <div class="day-intro">
+    <div class="day-icon chest">💪</div>
+    <div><div class="day-label">Giorno 1</div><div class="day-title">Petto e Tricipiti</div></div>
+  </div>
+
+  <div class="section-label">Panca piana</div>
+
+  <div class="exercise-card" data-id="g1_pancapiana_manubri">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Panca piana con manubri</div><div class="exercise-meta">3 serie · 10–12 rip · riposo 90 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=VmB1G1K7v94" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">12 rip pulite × 2 sett. di fila → +2 kg</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Scendi lento (2 sec), spingi espirando. Non bloccare i gomiti.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="exercise-card" data-id="g1_pancainclinata">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Panca inclinata con manubri</div><div class="exercise-meta">3 serie · 10–12 rip · riposo 90 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=DbFgADa2PL8" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">Stesse regole della piana: +2 kg dopo 2 sett.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Schienale a 30–45°. Gomiti sotto le spalle, non a 90°.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="exercise-card" data-id="g1_croci">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Croci con manubri in panca</div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=eozdVDA78K0" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+1–2 kg ogni 3 sett. Finitura, non caricare troppo.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Braccia leggermente curve, senti lo stretch. Movimento lento.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="section-label">Cavi</div>
+
+  <div class="exercise-card" data-id="g1_pushdown">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Pushdown ai cavi (tricipiti)</div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=2-LAMcpzODU" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+2.5 kg ogni 2–3 sett. quando diventa facile</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Gomiti fissi ai fianchi. Spingi fino a estensione completa.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="exercise-card" data-id="g1_frenchpress">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">French press con manubri</div><div class="exercise-meta">3 serie · 10–12 rip · riposo 60 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=izfXtOG0UEk" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+1–2 kg ogni 3 sett. Ottimo per il capo lungo del tricipite.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Sdraiato in panca, gomiti puntati al soffitto. Abbassa i manubri verso le orecchie, non la fronte.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="abs-section">
+    <div class="abs-title">◉ Addome — da fare alla fine</div>
+    <div class="abs-exercise"><div class="abs-row"><span>Crunch</span></div><a class="abs-yt" href="https://www.youtube.com/watch?v=MKmrqcoCZ-M" target="_blank">▶ Video</a><span class="abs-sets">3 × 15 rip</span></div>
+    <div class="abs-exercise"><div class="abs-row"><span>Leg raise</span></div><a class="abs-yt" href="https://www.youtube.com/watch?v=JB2oyawG9KI" target="_blank">▶ Video</a><span class="abs-sets">3 × 12 rip</span></div>
+  </div>
+</div>
+
+<!-- ===================== GIORNO 2 ===================== -->
+<div class="day-panel" id="day-1">
+  <div class="day-intro">
+    <div class="day-icon back">🔋</div>
+    <div><div class="day-label">Giorno 2</div><div class="day-title">Schiena e Bicipiti</div></div>
+  </div>
+
+  <div class="section-label">Cavi — lat machine e rematore</div>
+
+  <div class="exercise-card" data-id="g2_latmachine">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Lat machine (presa larga)</div><div class="exercise-meta">4 serie · 10–12 rip · riposo 90 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=CAwf7n6Luuc" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+5 kg ogni 2 sett. Principale esercizio per la schiena larga.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Tira verso il petto. Pensa a portare i gomiti verso le tasche.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="4"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="exercise-card" data-id="g2_rematore">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Rematore al cavo basso (presa stretta)</div><div class="exercise-meta">3 serie · 10–12 rip · riposo 90 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=GZbfZ033f74" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+5 kg ogni 2–3 sett., schiena sempre dritta.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Schiena leggermente inclinata. Tira verso l'ombelico.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="exercise-card" data-id="g2_pullover">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Pullover al cavo (faccia al cavo alto)</div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=mW2dxdmFEPE" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+2.5 kg ogni 3 sett. Ottimo per il dorsale.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Braccia quasi distese. Pensa a "chiudere le ascelle".</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="section-label">Manubri — bicipiti</div>
+
+  <div class="exercise-card" data-id="g2_curl_manubri">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Curl con manubri alternati</div><div class="exercise-meta">3 serie · 10–12 rip · riposo 60 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=ykJmrZ5v0Oo" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+1–2 kg ogni 2–3 sett. Non esagerare all'inizio.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Gomiti fermi ai fianchi. Non dondolare la schiena.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="exercise-card" data-id="g2_curl_cavo">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Curl al cavo basso (bicipiti)</div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=NFzTWp2qpiE" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+2.5 kg ogni 3 sett. Tensione costante su tutto il ROM.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Porta le mani al mento, poi scendi lento in 2–3 sec.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== GIORNO 3 ===================== -->
+<div class="day-panel" id="day-2">
+  <div class="day-intro">
+    <div class="day-icon legs">🦵</div>
+    <div><div class="day-label">Giorno 3</div><div class="day-title">Gambe e Spalle</div></div>
+  </div>
+
+  <div class="section-label">Macchine gambe</div>
+
+  <div class="exercise-card" data-id="g3_legpress">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Leg press</div><div class="exercise-meta">4 serie · 10–12 rip · riposo 90 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=IZxyjW7MPJQ" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+5–10 kg ogni 2 sett. Le gambe reggono carichi alti.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Non bloccare le ginocchia in estensione completa.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="4"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="exercise-card" data-id="g3_legextension">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Leg extension (quadricipiti)</div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=YyvSfVjQeL0" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+5 kg ogni 2–3 sett. Senti bruciare il quadricipite.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Estendi lento, trattieni 1 sec in alto, scendi piano.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="exercise-card" data-id="g3_legcurl">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Leg curl (femorali)</div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=ELOCsoDSmrg" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+5 kg ogni 2–3 sett. Fondamentale per equilibrare i quad.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Non sollevare i fianchi. Schiena bassa sul cuscinetto.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="section-label">Manubri e macchine — spalle</div>
+
+  <div class="exercise-card" data-id="g3_shoulderpress">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Lento avanti con manubri (shoulder press)</div><div class="exercise-meta">3 serie · 10–12 rip · riposo 90 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=qEwKCR5JCog" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+2 kg ogni 2 sett. Base per le spalle, privilegia la forma.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Panca con schienale. Non inarcare la schiena bassa.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="exercise-card" data-id="g3_alzatelat">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Alzate laterali con manubri</div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=3VcKaXpzqRo" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+1–2 kg ogni 3 sett. Le spalle sono delicate.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Alzale fino all'altezza spalle. Pollici verso il basso.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="exercise-card" data-id="g3_alzatefrontali">
+    <div class="exercise-top">
+      <div class="exercise-header">
+        <div><div class="exercise-name">Alzate frontali al cavo</div><div class="exercise-meta">3 serie · 12–15 rip · riposo 60 sec</div></div>
+        <a class="yt-link" href="https://www.youtube.com/watch?v=gkfY4bvdFWw" target="_blank">▶ Video</a>
+      </div>
+      <div class="details-grid">
+        <div class="detail-box"><div class="detail-box-label">📈 Progressione</div><div class="detail-box-value progression">+2.5 kg ogni 3 sett. Deltoide anteriore.</div></div>
+        <div class="detail-box"><div class="detail-box-label">💡 Tip</div><div class="detail-box-value">Cavo basso, di spalle. Alza fino all'altezza degli occhi.</div></div>
+      </div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Le mie serie</div>
+      <div class="sets-list" data-sets="3"></div>
+      <div class="tracker-note"><textarea rows="2" placeholder="Note sessione…"></textarea></div>
+      <button class="reset-btn" onclick="resetCard(this)">Azzera</button>
+    </div>
+  </div>
+
+  <div class="abs-section">
+    <div class="abs-title">◉ Addome — da fare alla fine</div>
+    <div class="abs-exercise"><div class="abs-row"><span>Crunch</span></div><a class="abs-yt" href="https://www.youtube.com/watch?v=MKmrqcoCZ-M" target="_blank">▶ Video</a><span class="abs-sets">3 × 15 rip</span></div>
+    <div class="abs-exercise"><div class="abs-row"><span>Leg raise</span></div><a class="abs-yt" href="https://www.youtube.com/watch?v=JB2oyawG9KI" target="_blank">▶ Video</a><span class="abs-sets">3 × 12 rip</span></div>
+  </div>
+</div>
+
+<div class="footer">Dati salvati nel browser · video tutorial YouTube</div>
+
+<script>
+// ── TRACKER LOGIC ────────────────────────────────────────────
+function getKey(card, setIndex, field) {
+  return 'scheda__' + card.dataset.id + '__s' + setIndex + '__' + field;
+}
+function getNoteKey(card) {
+  return 'scheda__' + card.dataset.id + '__note';
+}
+
+function buildSets(card) {
+  var list = card.querySelector('.sets-list');
+  var n = parseInt(list.dataset.sets);
+  list.innerHTML = '';
+  for (var i = 0; i < n; i++) {
+    var row = document.createElement('div');
+    row.className = 'set-row';
+    row.innerHTML =
+      '<span class="set-num">S' + (i+1) + '</span>' +
+      '<input class="set-input" type="number" min="0" max="500" step="0.5" placeholder="kg" data-field="kg" data-idx="' + i + '">' +
+      '<span class="set-separator">×</span>' +
+      '<input class="set-input" type="number" min="0" max="200" step="1" placeholder="rip" data-field="rip" data-idx="' + i + '">' +
+      '<button class="set-done" data-idx="' + i + '" onclick="toggleDone(this)">✓</button>';
+    list.appendChild(row);
+
+    // restore from localStorage
+    var kgVal = localStorage.getItem(getKey(card, i, 'kg'));
+    var ripVal = localStorage.getItem(getKey(card, i, 'rip'));
+    var doneVal = localStorage.getItem(getKey(card, i, 'done'));
+    if (kgVal) row.querySelector('[data-field="kg"]').value = kgVal;
+    if (ripVal) row.querySelector('[data-field="rip"]').value = ripVal;
+    if (doneVal === '1') row.querySelector('.set-done').classList.add('checked');
+
+    // save on change
+    row.querySelectorAll('.set-input').forEach(function(inp) {
+      inp.addEventListener('input', function() {
+        localStorage.setItem(getKey(card, parseInt(inp.dataset.idx), inp.dataset.field), inp.value);
+      });
+    });
+  }
+
+  // note
+  var ta = card.querySelector('textarea');
+  var savedNote = localStorage.getItem(getNoteKey(card));
+  if (savedNote) ta.value = savedNote;
+  ta.addEventListener('input', function() {
+    localStorage.setItem(getNoteKey(card), ta.value);
+  });
+}
+
+function toggleDone(btn) {
+  btn.classList.toggle('checked');
+  var card = btn.closest('.exercise-card');
+  var idx = parseInt(btn.dataset.idx);
+  localStorage.setItem(getKey(card, idx, 'done'), btn.classList.contains('checked') ? '1' : '0');
+}
+
+function resetCard(btn) {
+  var card = btn.closest('.exercise-card');
+  var list = card.querySelector('.sets-list');
+  var n = parseInt(list.dataset.sets);
+  if (!confirm('Azzera i dati di questo esercizio?')) return;
+  for (var i = 0; i < n; i++) {
+    localStorage.removeItem(getKey(card, i, 'kg'));
+    localStorage.removeItem(getKey(card, i, 'rip'));
+    localStorage.removeItem(getKey(card, i, 'done'));
+  }
+  localStorage.removeItem(getNoteKey(card));
+  buildSets(card);
+  card.querySelector('textarea').value = '';
+}
+
+// ── TABS ────────────────────────────────────────────────────
+function showDay(index) {
+  document.querySelectorAll('.day-panel').forEach(function(p, i) { p.classList.toggle('active', i === index); });
+  document.querySelectorAll('.tab').forEach(function(t, i) { t.classList.toggle('active', i === index); });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── INIT ────────────────────────────────────────────────────
+document.querySelectorAll('.exercise-card[data-id]').forEach(function(card) {
+  buildSets(card);
+});
+</script>
+</body>
+</html>
